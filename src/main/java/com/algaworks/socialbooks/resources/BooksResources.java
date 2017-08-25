@@ -22,74 +22,74 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algaworks.socialbooks.domain.Comment;
 import com.algaworks.socialbooks.domain.Book;
-import com.algaworks.socialbooks.services.LivrosService;
+import com.algaworks.socialbooks.services.BooksService;
 
 @RestController
 @RequestMapping("/livros")
-public class LivrosResources {
-	
+public class BooksResources {
+
 	@Autowired
-	private LivrosService livrosService;
-	
+	private BooksService booksService;
+
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Book>> listar(){		
-		return ResponseEntity.status(HttpStatus.OK).body(livrosService.listar());
+	public ResponseEntity<List<Book>> list() {
+		return ResponseEntity.status(HttpStatus.OK).body(booksService.list());
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> salvar(@Valid @RequestBody Book livro) {
-		livro = livrosService.salvar(livro);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(livro.getId()).toUri();
-		
+	public ResponseEntity<Void> save(@Valid @RequestBody Book book) {
+		Book bookSaved = booksService.save(book);
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(bookSaved.getId())
+				.toUri();
+
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
-		Book livro = livrosService.buscar(id);
-		
+	public ResponseEntity<Book> findById(@PathVariable("id") Long id) {
+		Book book = booksService.findById(id);
+
 		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
-		
-		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(livro);
+
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(book);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
-		livrosService.deletar(id);		
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+		booksService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> atualizar(@RequestBody Book livro, @PathVariable("id") Long id) {
-		livro.setId(id);
-		livrosService.atualizar(livro);
-		
+	public ResponseEntity<Void> update(@RequestBody Book book, @PathVariable("id") Long id) {
+		book.setId(id);
+		booksService.update(book);
+
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@RequestMapping(value = "/{id}/comentarios", method = RequestMethod.POST)
-	public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId, 
-			@RequestBody Comment comentario){
-		
+	public ResponseEntity<Void> addComments(@PathVariable("id") Long bookId, @RequestBody Comment comment) {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-		comentario.setUser(auth.getName());
-		
-		livrosService.salvarComentario(livroId, comentario);
-		
+
+		comment.setUser(auth.getName());
+
+		booksService.saveComment(bookId, comment);
+
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-		
+
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@RequestMapping(value = "/{id}/comentarios", method = RequestMethod.GET)
-	public ResponseEntity<List<Comment>> adicionarComentario(@PathVariable("id") Long livroId){
-		
-		List<Comment> comentarios = livrosService.listarComentarios(livroId);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(comentarios);
+	public ResponseEntity<List<Comment>> listComments(@PathVariable("id") Long bookId) {
+
+		List<Comment> comments = booksService.listComment(bookId);
+
+		return ResponseEntity.status(HttpStatus.OK).body(comments);
 	}
 
 }

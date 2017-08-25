@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.algaworks.socialbooks.domain.Comment;
 
-public interface ComentariosRepository extends JpaRepository<Comment, Long>{
+public interface CommentsRepository extends JpaRepository<Comment, Long>{
 
 }

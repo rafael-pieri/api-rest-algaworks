@@ -9,58 +9,62 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.algaworks.socialbooks.domain.ErrorDetails;
-import com.algaworks.socialbooks.services.exceptions.AutorExistenteException;
-import com.algaworks.socialbooks.services.exceptions.AutorNaoEncontradoException;
-import com.algaworks.socialbooks.services.exceptions.LivroNaoEncontradoException;
+import com.algaworks.socialbooks.services.exceptions.AuthorAlreadyExistsException;
+import com.algaworks.socialbooks.services.exceptions.AuthorNotFoundException;
+import com.algaworks.socialbooks.services.exceptions.BookNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-	@ExceptionHandler(LivroNaoEncontradoException.class)
-	public ResponseEntity<ErrorDetails> handleLivroNaoEncontradoException(LivroNaoEncontradoException e, HttpServletRequest request){
-		
-		ErrorDetails erro = new ErrorDetails();
-		erro.setStatus(404L);
-		erro.setTitle("Livro não pôde ser encontrado.");
-		erro.setDeveloperMessage("http://erros.socialbooks.com/404");
-		erro.setTimestamp(System.currentTimeMillis());
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+	@ExceptionHandler(BookNotFoundException.class)
+	public ResponseEntity<ErrorDetails> handleBookNotFoundException(BookNotFoundException bookNotFoundException,
+			HttpServletRequest request) {
+
+		ErrorDetails errorDetails = new ErrorDetails();
+		errorDetails.setStatus(404L);
+		errorDetails.setTitle("The book could not be found.");
+		errorDetails.setDeveloperMessage("http://errors.socialbooks.com/404");
+		errorDetails.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
 	}
-	
-	@ExceptionHandler(AutorExistenteException.class)
-	public ResponseEntity<ErrorDetails> handleAutorExistenteException(AutorExistenteException e, HttpServletRequest request){
-		
-		ErrorDetails erro = new ErrorDetails();
-		erro.setStatus(409L);
-		erro.setTitle("Autor já existente.");
-		erro.setDeveloperMessage("http://erros.socialbooks.com/409");
-		erro.setTimestamp(System.currentTimeMillis());
-		
-		return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+
+	@ExceptionHandler(AuthorAlreadyExistsException.class)
+	public ResponseEntity<ErrorDetails> handleAuthorAlreadyExistsException(
+			AuthorAlreadyExistsException authorAlreadyExistsException, HttpServletRequest request) {
+
+		ErrorDetails errorDetails = new ErrorDetails();
+		errorDetails.setStatus(409L);
+		errorDetails.setTitle("The author already exists.");
+		errorDetails.setDeveloperMessage("http://errors.socialbooks.com/409");
+		errorDetails.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDetails);
 	}
-	
-	@ExceptionHandler(AutorNaoEncontradoException.class)
-	public ResponseEntity<ErrorDetails> handleAutorNaoEncontradoException(AutorNaoEncontradoException e, HttpServletRequest request){
-		
-		ErrorDetails erro = new ErrorDetails();
-		erro.setStatus(404L);
-		erro.setTitle("Autor não pôde ser encontrado.");
-		erro.setDeveloperMessage("http://erros.socialbooks.com/404");
-		erro.setTimestamp(System.currentTimeMillis());
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+
+	@ExceptionHandler(AuthorNotFoundException.class)
+	public ResponseEntity<ErrorDetails> handleAuthorNotFoundException(AuthorNotFoundException authorNotFoundException,
+			HttpServletRequest request) {
+
+		ErrorDetails errorDetails = new ErrorDetails();
+		errorDetails.setStatus(404L);
+		errorDetails.setTitle("The author could not be found.");
+		errorDetails.setDeveloperMessage("http://errors.socialbooks.com/404");
+		errorDetails.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
 	}
-	
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ErrorDetails> handleDataIntegrityViolationException(DataIntegrityViolationException e, HttpServletRequest request){
-		
-		ErrorDetails erro = new ErrorDetails();
-		erro.setStatus(400L);
-		erro.setTitle("Requisição inválida.");
-		erro.setDeveloperMessage("http://erros.socialbooks.com/400");
-		erro.setTimestamp(System.currentTimeMillis());
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	public ResponseEntity<ErrorDetails> handleDataIntegrityViolationException(
+			DataIntegrityViolationException dataIntegrityViolationException, HttpServletRequest request) {
+
+		ErrorDetails errorDetails = new ErrorDetails();
+		errorDetails.setStatus(400L);
+		errorDetails.setTitle("Invalid request.");
+		errorDetails.setDeveloperMessage("http://errors.socialbooks.com/400");
+		errorDetails.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
 	}
 }

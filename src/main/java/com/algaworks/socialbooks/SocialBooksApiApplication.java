@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SocialbooksapiApplication {
+public class SocialBooksApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SocialbooksapiApplication.class, args);
+		SpringApplication.run(SocialBooksApiApplication.class, args);
 	}
 }

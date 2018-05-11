@@ -14,7 +14,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("algaworks").password("s3nh4").roles("USER");
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -24,5 +24,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and().httpBasic()
 			.and().csrf().disable();
 	}
-	
 }

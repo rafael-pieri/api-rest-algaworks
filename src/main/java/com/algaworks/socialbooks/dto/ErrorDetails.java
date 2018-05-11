@@ -1,4 +1,4 @@
-package com.algaworks.socialbooks.domain;
+package com.algaworks.socialbooks.dto;
 
 public class ErrorDetails {
 
@@ -41,5 +41,4 @@ public class ErrorDetails {
 	public void setDeveloperMessage(String developerMessage) {
 		this.developerMessage = developerMessage;
 	}
-
 }

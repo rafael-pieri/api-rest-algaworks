@@ -1,4 +1,4 @@
-package com.algaworks.socialbooks.services.exceptions;
+package com.algaworks.socialbooks.exceptions;
 
 public class AuthorNotFoundException extends RuntimeException {
 
@@ -11,5 +11,4 @@ public class AuthorNotFoundException extends RuntimeException {
 	public AuthorNotFoundException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
 }

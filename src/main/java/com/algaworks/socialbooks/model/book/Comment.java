@@ -1,5 +1,6 @@
-package com.algaworks.socialbooks.domain;
+package com.algaworks.socialbooks.model.book;
 
+import com.algaworks.socialbooks.model.book.Book;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -82,5 +83,4 @@ public class Comment {
 	public void setBook(Book book) {
 		this.book = book;
 	}
-
 }

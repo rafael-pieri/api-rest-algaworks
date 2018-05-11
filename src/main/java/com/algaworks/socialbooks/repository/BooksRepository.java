@@ -1,9 +1,17 @@
 package com.algaworks.socialbooks.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.algaworks.socialbooks.model.book.Book;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.repository.Repository;
 
-import com.algaworks.socialbooks.domain.Book;
+public interface BooksRepository extends Repository<Book, Long> {
 
-public interface BooksRepository extends JpaRepository<Book, Long>{
+    Optional<Book> findOne(Long id);
 
+    Optional<List<Book>> findAll();
+
+    Optional<Book> save(Book book);
+
+    void delete(Long id);
 }

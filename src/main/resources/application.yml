@@ -1,0 +1,21 @@
+spring:
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/socialbooksDB?createDatabaseIfNotExist=true
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate.ddl-auto: create-drop
+#    generate-ddl: true
+#    show-sql: true
+
+swagger:
+  title: SocialBooks
+  description: Manage books, authors and comments about books.
+  contact:
+    name: Rafael De Pieri Barbosa
+  version: 1.0.0

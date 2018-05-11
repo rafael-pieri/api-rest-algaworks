@@ -1,75 +1,71 @@
 package com.algaworks.socialbooks.services;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
-
-import com.algaworks.socialbooks.domain.Comment;
-import com.algaworks.socialbooks.domain.Book;
-import com.algaworks.socialbooks.repository.CommentsRepository;
+import com.algaworks.socialbooks.model.book.Book;
+import com.algaworks.socialbooks.dto.BookDTO;
 import com.algaworks.socialbooks.repository.BooksRepository;
-import com.algaworks.socialbooks.services.exceptions.BookNotFoundException;
+import com.algaworks.socialbooks.repository.CommentsRepository;
+import com.algaworks.socialbooks.exceptions.BookNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BooksService {
 
-	@Autowired
-	private BooksRepository booksRepository;
+    @Autowired
+    private BooksRepository booksRepository;
 
-	@Autowired
-	private CommentsRepository commentsRepository;
+    @Autowired
+    private CommentsRepository commentsRepository;
 
-	public List<Book> list() {
-		return booksRepository.findAll();
-	}
+    public Collection<BookDTO> list() {
+        ArrayList<BookDTO> bookDTO = new ArrayList<>();
 
-	public Book findById(Long id) {
-		Book book = booksRepository.findOne(id);
+        BeanUtils.copyProperties(booksRepository.findAll(), bookDTO);
 
-		if (book == null) {
-			throw new BookNotFoundException("The book could not be found.");
-		}
+        return bookDTO;
+    }
 
-		return book;
-	}
+    public BookDTO findById(Long id) {
+        Optional<Book> book = booksRepository.findOne(id);
 
-	public Book save(Book book) {
-		book.setId(null);
-		return booksRepository.save(book);
-	}
+        if (!book.isPresent()) {
+            throw new BookNotFoundException("The book could not be found.");
+        }
 
-	public void delete(Long id) {
-		try {
-			booksRepository.delete(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new BookNotFoundException("The book could not be found.");
-		}
-	}
+        BookDTO bookDTO = new BookDTO();
 
-	public void update(Book book) {
-		verifyExistence(book);
-		booksRepository.save(book);
-	}
+        BeanUtils.copyProperties(book.get(), bookDTO);
 
-	private void verifyExistence(Book book) {
-		findById(book.getId());
-	}
+        return bookDTO;
+    }
 
-	public Comment saveComment(Long bookId, Comment comment) {
-		Book book = findById(bookId);
+    public BookDTO save(Book book) {
+        BookDTO bookDTO = new BookDTO();
 
-		comment.setBook(book);
-		comment.setDate(new Date());
+        BeanUtils.copyProperties(booksRepository.save(book).orElseThrow(RuntimeException::new), bookDTO);
 
-		return commentsRepository.save(comment);
-	}
+        return bookDTO;
+    }
 
-	public List<Comment> listComment(Long bookId) {
-		Book book = findById(bookId);
-		return book.getComments();
-	}
+    public void delete(Long id) {
+        if(!booksRepository.findOne(id).isPresent()){
+            throw new BookNotFoundException("The book could not be found.");
+        }
 
+        booksRepository.delete(id);
+    }
+
+    public void update(Long id, Book book) {
+        Optional<Book> one = booksRepository.findOne(id);
+
+        if(!one.isPresent()){
+            throw new BookNotFoundException("The book could not be found.");
+        }
+
+        booksRepository.save(one.get());
+    }
 }

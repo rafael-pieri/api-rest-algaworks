@@ -1,8 +1,11 @@
-package com.algaworks.socialbooks.domain;
+package com.algaworks.socialbooks.model.book;
 
+import com.algaworks.socialbooks.model.author.Author;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,15 +15,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 @Entity
-public class Book {
+public class BookHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,11 +47,9 @@ public class Book {
 	@JsonInclude(Include.NON_NULL)
 	private Author author;
 
-	public Book() {
+	public BookHistory() {}
 
-	}
-
-	public Book(String name) {
+	public BookHistory(String name) {
 		this.name = name;
 	}
 
@@ -112,5 +108,4 @@ public class Book {
 	public void setAuthor(Author author) {
 		this.author = author;
 	}
-
 }

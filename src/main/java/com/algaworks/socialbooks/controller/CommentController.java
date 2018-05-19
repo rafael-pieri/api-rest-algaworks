@@ -1,8 +1,8 @@
 package com.algaworks.socialbooks.controller;
 
 import com.algaworks.socialbooks.model.book.Comment;
-import com.algaworks.socialbooks.services.CommentsService;
-import com.wordnik.swagger.annotations.Api;
+import com.algaworks.socialbooks.services.CommentService;
+import io.swagger.annotations.Api;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Api(value = "comments")
 @RestController
 @RequestMapping("/api/books")
-public class CommentsController {
+public class CommentController {
 
     @Autowired
-    private CommentsService commentsService;
+    private CommentService commentService;
 
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     public ResponseEntity<Void> addComments(@PathVariable("id") Long bookId, @RequestBody Comment comment) {
@@ -33,7 +33,7 @@ public class CommentsController {
 
         comment.setUser(auth.getName());
 
-        commentsService.saveComment(bookId, comment);
+        commentService.saveComment(bookId, comment);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
 
@@ -44,6 +44,6 @@ public class CommentsController {
     @ResponseStatus(HttpStatus.OK)
     public List<Comment> listComments(@PathVariable("id") Long bookId) {
 
-        return commentsService.listComment(bookId);
+        return commentService.listComment(bookId);
     }
 }

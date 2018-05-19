@@ -14,8 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Author {
@@ -93,6 +95,11 @@ public class Author {
     public static class AuthorBuilder {
 
         private Author author = new Author();
+
+        public AuthorBuilder withId(UUID id) {
+            this.author.id = id;
+            return this;
+        }
 
         public AuthorBuilder withName(String name) {
             this.author.name = name;

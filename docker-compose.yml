@@ -1,0 +1,13 @@
+version: '1'
+services:
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - 9000:9000
+      - 9092:9092
+  database:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306

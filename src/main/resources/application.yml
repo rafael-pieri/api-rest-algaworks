@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: socialbooks
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
@@ -9,13 +11,15 @@ spring:
     password: root
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
 #    generate-ddl: true
 #    show-sql: true
 
 swagger:
   title: SocialBooks
-  description: Manage books, authors and comments about books.
+  description: Social books APIs.
   contact:
     name: Rafael De Pieri Barbosa
+    url: socialbooks.com
+    email: email@socialbooks.com
   version: 1.0.0

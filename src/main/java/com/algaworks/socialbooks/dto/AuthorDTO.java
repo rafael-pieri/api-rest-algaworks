@@ -1,6 +1,7 @@
 package com.algaworks.socialbooks.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,7 +11,8 @@ public class AuthorDTO {
 
     private String name;
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @ApiModelProperty(required = true, example = "2018-01-01")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birth;
 
     private String nationality;

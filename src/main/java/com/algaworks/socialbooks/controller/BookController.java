@@ -1,12 +1,12 @@
 package com.algaworks.socialbooks.controller;
 
-import com.algaworks.socialbooks.model.book.Book;
 import com.algaworks.socialbooks.dto.BookDTO;
-import com.algaworks.socialbooks.services.BooksService;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
+import com.algaworks.socialbooks.model.book.Book;
+import com.algaworks.socialbooks.services.BookService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
@@ -25,31 +25,31 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "books")
 @RestController
 @RequestMapping("/api/books")
-public class BooksController {
+public class BookController {
 
     @Autowired
-    private BooksService booksService;
+    private BookService bookService;
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Gets list of Books", response = BookDTO.class,
+    @ApiOperation(value = "Gets findAll of Books", response = BookDTO.class,
         responseContainer = "List", tags = {"Books"})
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successful operation", response = BookDTO.class)})
     public Collection<BookDTO> list() {
-        return booksService.list();
+        return bookService.list();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public BookDTO save(@Valid @RequestBody Book book) {
-        return booksService.save(book);
+        return bookService.save(book);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<BookDTO> findById(@PathVariable("id") Long id) {
-        BookDTO book = booksService.findById(id);
+        BookDTO book = bookService.findById(id);
 
         CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
 
@@ -59,12 +59,12 @@ public class BooksController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
-        booksService.delete(id);
+        bookService.delete(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody Book book, @PathVariable("id") Long id) {
-        booksService.update(id, book);
+        bookService.update(id, book);
     }
 }

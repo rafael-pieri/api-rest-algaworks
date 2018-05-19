@@ -2,8 +2,8 @@ package com.algaworks.socialbooks.services;
 
 import com.algaworks.socialbooks.model.book.Book;
 import com.algaworks.socialbooks.dto.BookDTO;
-import com.algaworks.socialbooks.repository.BooksRepository;
-import com.algaworks.socialbooks.repository.CommentsRepository;
+import com.algaworks.socialbooks.repository.BookRepository;
+import com.algaworks.socialbooks.repository.CommentRepository;
 import com.algaworks.socialbooks.exceptions.BookNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,24 +13,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BooksService {
+public class BookService {
 
     @Autowired
-    private BooksRepository booksRepository;
+    private BookRepository bookRepository;
 
     @Autowired
-    private CommentsRepository commentsRepository;
+    private CommentRepository commentRepository;
 
     public Collection<BookDTO> list() {
         ArrayList<BookDTO> bookDTO = new ArrayList<>();
 
-        BeanUtils.copyProperties(booksRepository.findAll(), bookDTO);
+        BeanUtils.copyProperties(bookRepository.findAll(), bookDTO);
 
         return bookDTO;
     }
 
     public BookDTO findById(Long id) {
-        Optional<Book> book = booksRepository.findOne(id);
+        Optional<Book> book = bookRepository.findOne(id);
 
         if (!book.isPresent()) {
             throw new BookNotFoundException("The book could not be found.");
@@ -46,26 +46,26 @@ public class BooksService {
     public BookDTO save(Book book) {
         BookDTO bookDTO = new BookDTO();
 
-        BeanUtils.copyProperties(booksRepository.save(book).orElseThrow(RuntimeException::new), bookDTO);
+        BeanUtils.copyProperties(bookRepository.save(book).orElseThrow(RuntimeException::new), bookDTO);
 
         return bookDTO;
     }
 
     public void delete(Long id) {
-        if(!booksRepository.findOne(id).isPresent()){
+        if(!bookRepository.findOne(id).isPresent()){
             throw new BookNotFoundException("The book could not be found.");
         }
 
-        booksRepository.delete(id);
+        bookRepository.delete(id);
     }
 
     public void update(Long id, Book book) {
-        Optional<Book> one = booksRepository.findOne(id);
+        Optional<Book> one = bookRepository.findOne(id);
 
         if(!one.isPresent()){
             throw new BookNotFoundException("The book could not be found.");
         }
 
-        booksRepository.save(one.get());
+        bookRepository.save(one.get());
     }
 }

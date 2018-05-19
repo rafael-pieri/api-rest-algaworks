@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
-public interface BooksRepository extends Repository<Book, Long> {
+public interface BookRepository extends Repository<Book, Long> {
 
     Optional<Book> findOne(Long id);
 

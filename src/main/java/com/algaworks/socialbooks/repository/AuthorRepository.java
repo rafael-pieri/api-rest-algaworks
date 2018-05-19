@@ -7,7 +7,7 @@ import com.algaworks.socialbooks.model.author.Author;
 import java.util.UUID;
 import org.springframework.data.repository.Repository;
 
-public interface AuthorsRepository extends Repository<Author, UUID> {
+public interface AuthorRepository extends Repository<Author, UUID> {
 
     Optional<Author> findOne(UUID id);
 

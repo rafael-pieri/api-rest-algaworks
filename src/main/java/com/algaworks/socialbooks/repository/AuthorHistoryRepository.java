@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.repository.Repository;
 
-public interface AuthorsHistoryRepository extends Repository<AuthorHistory, UUID> {
+public interface AuthorHistoryRepository extends Repository<AuthorHistory, UUID> {
 
 //    Optional<AuthorHistory> findOne(UUID id);
 //

@@ -6,7 +6,7 @@ import com.algaworks.socialbooks.dto.AuthorPostObjectDTO;
 import com.algaworks.socialbooks.exceptions.AuthorNotFoundException;
 import com.algaworks.socialbooks.mapper.AuthorMapper;
 import com.algaworks.socialbooks.model.author.Author;
-import com.algaworks.socialbooks.repository.AuthorsRepository;
+import com.algaworks.socialbooks.repository.AuthorRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -15,25 +15,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthorsService {
+public class AuthorService {
 
     @Autowired
-    private AuthorsRepository authorsRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    private AuthorsHistoryService authorsHistoryService;
+    private AuthorHistoryService authorHistoryService;
 
-    public Collection<AuthorDTO> list() {
-        Optional<List<Author>> authors = authorsRepository.findAll();
+    public Collection<AuthorDTO> findAll() {
+        final Optional<List<Author>> authors = authorRepository.findAll();
 
         return AuthorMapper.INSTANCE.toAuthorsList(authors);
     }
 
     public AuthorDTO findById(UUID id) {
-        Optional<Author> author = authorsRepository.findOne(id);
+        final Optional<Author> author = authorRepository.findOne(id);
 
         if (author.isPresent()) {
-            Author selectedAuthor = author.get();
+            final Author selectedAuthor = author.get();
 
             return new AuthorDTO.AuthorBuilderDTO()
                 .withId(selectedAuthor.getId())
@@ -47,15 +47,15 @@ public class AuthorsService {
     }
 
     public AuthorCreateDTO save(AuthorPostObjectDTO authorPostObjectDTO) {
-        Author author = new Author.AuthorBuilder()
+        final Author author = new Author.AuthorBuilder()
             .withName(authorPostObjectDTO.getName())
             .withBirth(authorPostObjectDTO.getBirth())
             .withNationality(authorPostObjectDTO.getNationality())
             .build();
 
-        Author createdAuthor = authorsRepository.save(author).orElseThrow(RuntimeException::new);
+        final Author createdAuthor = authorRepository.save(author).orElseThrow(RuntimeException::new);
 
-        authorsHistoryService.save(createdAuthor);
+        authorHistoryService.save(createdAuthor);
 
         return new AuthorCreateDTO(createdAuthor.getId(), createdAuthor.getModifiedAt());
     }

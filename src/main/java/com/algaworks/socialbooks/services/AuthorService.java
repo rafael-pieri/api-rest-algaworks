@@ -107,10 +107,10 @@ public class AuthorService {
 
         authorRepository.deleteById(id);
 
-        softDeleteNotificationHistoryByNotificationId(id);
+        softDeleteAuthorHistoryById(id);
     }
 
-    private void softDeleteNotificationHistoryByNotificationId(final UUID id) {
+    private void softDeleteAuthorHistoryById(final UUID id) {
         Optional<AuthorHistory> optionalAuthorHistory = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
 
         if (optionalAuthorHistory.isPresent()) {

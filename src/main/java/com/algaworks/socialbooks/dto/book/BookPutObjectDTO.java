@@ -3,7 +3,7 @@ package com.algaworks.socialbooks.dto.book;
 import java.util.Date;
 import java.util.UUID;
 
-public class BookPostDTO {
+public class BookPutObjectDTO {
 
     private String name;
     private Date publication;
@@ -11,7 +11,7 @@ public class BookPostDTO {
     private String summary;
     private UUID authorId;
 
-    public BookPostDTO() {
+    public BookPutObjectDTO() {
 
     }
 

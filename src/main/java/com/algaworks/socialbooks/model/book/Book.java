@@ -4,6 +4,7 @@ import com.algaworks.socialbooks.model.author.Author;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -11,13 +12,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Type(type = "uuid-char")
+    @Column(columnDefinition = "VARCHAR(36)", length = 36)
+    private UUID id;
 
     @NotEmpty(message = "The field name is required.")
     private String name;
@@ -50,11 +54,11 @@ public class Book {
         this.name = name;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -110,7 +114,7 @@ public class Book {
 
         private Book book = new Book();
 
-        public BookBuilder withId(final Long id) {
+        public BookBuilder withId(final UUID id) {
             this.book.id = id;
             return this;
         }

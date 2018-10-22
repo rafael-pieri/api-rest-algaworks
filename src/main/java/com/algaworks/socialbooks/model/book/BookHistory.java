@@ -4,6 +4,7 @@ import com.algaworks.socialbooks.model.author.Author;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -11,13 +12,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class BookHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Type(type = "uuid-char")
+    @Column(columnDefinition = "VARCHAR(36)", length = 36)
+    private UUID id;
 
     @NotEmpty(message = "The field name is required.")
     private String name;
@@ -50,11 +54,11 @@ public class BookHistory {
         this.name = name;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -104,5 +108,49 @@ public class BookHistory {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public static class BookHistoryBuilder {
+
+        private BookHistory bookHistory = new BookHistory();
+
+        public BookHistoryBuilder withId(final UUID id) {
+            this.bookHistory.id = id;
+            return this;
+        }
+
+        public BookHistoryBuilder withName(final String name) {
+            this.bookHistory.name = name;
+            return this;
+        }
+
+        public BookHistoryBuilder withPublication(final Date publication) {
+            this.bookHistory.publication = publication;
+            return this;
+        }
+
+        public BookHistoryBuilder withPublisher(final String publisher) {
+            this.bookHistory.publisher = publisher;
+            return this;
+        }
+
+        public BookHistoryBuilder withSummary(final String summary) {
+            this.bookHistory.summary = summary;
+            return this;
+        }
+
+        public BookHistoryBuilder withComments(final List<Comment> comments) {
+            this.bookHistory.comments = comments;
+            return this;
+        }
+
+        public BookHistoryBuilder withAuthor(final Author author) {
+            this.bookHistory.author = author;
+            return this;
+        }
+
+        public BookHistory build() {
+            return this.bookHistory;
+        }
     }
 }

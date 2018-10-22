@@ -1,6 +1,6 @@
 package com.algaworks.socialbooks.controller;
 
-import com.algaworks.socialbooks.dto.book.BookPostDTO;
+import com.algaworks.socialbooks.dto.book.BookPostObjectDTO;
 import com.algaworks.socialbooks.dto.book.BookDTO;
 import com.algaworks.socialbooks.dto.book.BookUpdateDTO;
 import com.algaworks.socialbooks.services.BookService;
@@ -32,8 +32,8 @@ public class BookController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDTO save(@Valid @RequestBody BookPostDTO bookPostDTO) {
-        return bookService.save(bookPostDTO);
+    public BookDTO save(@Valid @RequestBody BookPostObjectDTO bookPostObjectDTO) {
+        return bookService.save(bookPostObjectDTO);
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

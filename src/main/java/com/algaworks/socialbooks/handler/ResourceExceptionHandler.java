@@ -18,13 +18,10 @@ public class ResourceExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorDetails handleBookNotFoundException(BookNotFoundException exception) {
-
-        ErrorDetails errorDetails = new ErrorDetails();
+        final ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(404L);
         errorDetails.setTitle("The book could not be found.");
-        errorDetails.setDeveloperMessage("http://errors.socialbooks.com/404");
         errorDetails.setTimestamp(System.currentTimeMillis());
-
         return errorDetails;
     }
 
@@ -32,13 +29,10 @@ public class ResourceExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public ErrorDetails handleAuthorAlreadyExistsException(AuthorAlreadyExistsException exception) {
-
-        ErrorDetails errorDetails = new ErrorDetails();
+        final ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(409L);
         errorDetails.setTitle("The author already exists.");
-        errorDetails.setDeveloperMessage("http://errors.socialbooks.com/409");
         errorDetails.setTimestamp(System.currentTimeMillis());
-
         return errorDetails;
     }
 
@@ -46,13 +40,10 @@ public class ResourceExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorDetails handleAuthorNotFoundException(AuthorNotFoundException exception) {
-
-        ErrorDetails errorDetails = new ErrorDetails();
+        final ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(404L);
         errorDetails.setTitle("The author could not be found.");
-        errorDetails.setDeveloperMessage("http://errors.socialbooks.com/404");
         errorDetails.setTimestamp(System.currentTimeMillis());
-
         return errorDetails;
     }
 
@@ -60,13 +51,10 @@ public class ResourceExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorDetails handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
-
-        ErrorDetails errorDetails = new ErrorDetails();
+        final ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(400L);
         errorDetails.setTitle("Invalid request.");
-        errorDetails.setDeveloperMessage("http://errors.socialbooks.com/400");
         errorDetails.setTimestamp(System.currentTimeMillis());
-
         return errorDetails;
     }
 }

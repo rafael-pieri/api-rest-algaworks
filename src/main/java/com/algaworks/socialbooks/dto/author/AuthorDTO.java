@@ -1,20 +1,11 @@
-package com.algaworks.socialbooks.dto;
+package com.algaworks.socialbooks.dto.author;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 import java.util.UUID;
 
 public class AuthorDTO {
 
     private UUID id;
-
     private String name;
-
-    @ApiModelProperty(required = true, example = "2018-01-01")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birth;
-
     private String nationality;
 
     public UUID getId() {
@@ -33,14 +24,6 @@ public class AuthorDTO {
         this.name = name;
     }
 
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
-    }
-
     public String getNationality() {
         return nationality;
     }
@@ -53,22 +36,17 @@ public class AuthorDTO {
 
         private AuthorDTO authorDTO = new AuthorDTO();
 
-        public AuthorBuilderDTO withId(UUID id) {
+        public AuthorBuilderDTO withId(final UUID id) {
             this.authorDTO.id = id;
             return this;
         }
 
-        public AuthorBuilderDTO withName(String name) {
+        public AuthorBuilderDTO withName(final String name) {
             this.authorDTO.name = name;
             return this;
         }
 
-        public AuthorBuilderDTO withBirth(Date birth) {
-            this.authorDTO.birth = birth;
-            return this;
-        }
-
-        public AuthorBuilderDTO withNationality(String nationality) {
+        public AuthorBuilderDTO withNationality(final String nationality) {
             this.authorDTO.nationality = nationality;
             return this;
         }

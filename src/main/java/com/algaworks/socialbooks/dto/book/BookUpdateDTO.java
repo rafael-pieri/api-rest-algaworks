@@ -1,39 +1,22 @@
-package com.algaworks.socialbooks.dto;
+package com.algaworks.socialbooks.dto.book;
 
 import com.algaworks.socialbooks.model.author.Author;
 import com.algaworks.socialbooks.model.book.Comment;
+
 import java.util.Date;
 import java.util.List;
 
-public class BookDTO {
-
-    private Long id;
+public class BookUpdateDTO {
 
     private String name;
-
     private Date publication;
-
     private String publisher;
-
     private String summary;
-
     private List<Comment> comments;
-
     private Author author;
 
-    public BookDTO() {
-    }
+    public BookUpdateDTO() {
 
-    public BookDTO(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

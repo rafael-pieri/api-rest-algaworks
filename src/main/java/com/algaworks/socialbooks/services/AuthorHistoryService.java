@@ -1,25 +1,28 @@
 package com.algaworks.socialbooks.services;
 
-import com.algaworks.socialbooks.model.author.Author;
 import com.algaworks.socialbooks.model.author.AuthorHistory;
 import com.algaworks.socialbooks.repository.AuthorHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class AuthorHistoryService {
 
+    private final AuthorHistoryRepository authorHistoryRepository;
+
     @Autowired
-    private AuthorHistoryRepository authorHistoryRepository;
+    public AuthorHistoryService(final AuthorHistoryRepository authorHistoryRepository) {
+        this.authorHistoryRepository = authorHistoryRepository;
+    }
 
-    public void save(Author author) {
-        final AuthorHistory authorHistory = new AuthorHistory.AuthorHistoryBuilder()
-            .withAuthorId(author.getId())
-            .withName(author.getName())
-            .withBirth(author.getBirth())
-            .withNationality(author.getNationality())
-            .build();
-
+    void createOrUpdate(final AuthorHistory authorHistory) {
         authorHistoryRepository.save(authorHistory);
+    }
+
+    Optional<AuthorHistory> findTopByAuthorIdOrderByCreatedAtDesc(final UUID authorId) {
+        return authorHistoryRepository.findTopByAuthorIdOrderByCreatedAtDesc(authorId);
     }
 }

@@ -4,108 +4,105 @@ import com.algaworks.socialbooks.model.author.Author;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class BookHistory {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@NotEmpty(message = "The field name is required.")
-	private String name;
+    @NotEmpty(message = "The field name is required.")
+    private String name;
 
-	@NotNull(message = "The field publication is required.")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date publication;
+    @NotNull(message = "The field publication is required.")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date publication;
 
-	@NotNull(message = "The field publisher is required.")
-	private String publisher;
+    @NotNull(message = "The field publisher is required.")
+    private String publisher;
 
-	@NotNull(message = "The field summary is required.")
-	@Size(max = 1500, message = "The field summary can not contain more than 1500 characters.")
-	private String summary;
+    @NotNull(message = "The field summary is required.")
+    @Size(max = 1500, message = "The field summary can not contain more than 1500 characters.")
+    private String summary;
 
-	@JsonInclude(Include.NON_EMPTY)
-	@OneToMany(mappedBy = "book")
-	private List<Comment> comments;
+    @JsonInclude(Include.NON_EMPTY)
+    @OneToMany(mappedBy = "book")
+    private List<Comment> comments;
 
-	@ManyToOne
-	@JoinColumn(name = "AUTHOR_ID")
-	@JsonInclude(Include.NON_NULL)
-	private Author author;
+    @ManyToOne
+    @JoinColumn(name = "AUTHOR_ID")
+    @JsonInclude(Include.NON_NULL)
+    private Author author;
 
-	public BookHistory() {}
+    public BookHistory() {
 
-	public BookHistory(String name) {
-		this.name = name;
-	}
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public BookHistory(String name) {
+        this.name = name;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Date getPublication() {
-		return publication;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPublication(Date publication) {
-		this.publication = publication;
-	}
+    public Date getPublication() {
+        return publication;
+    }
 
-	public String getPublisher() {
-		return publisher;
-	}
+    public void setPublication(Date publication) {
+        this.publication = publication;
+    }
 
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
+    public String getPublisher() {
+        return publisher;
+    }
 
-	public String getSummary() {
-		return summary;
-	}
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+    public String getSummary() {
+        return summary;
+    }
 
-	public List<Comment> getComments() {
-		return comments;
-	}
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+    public List<Comment> getComments() {
+        return comments;
+    }
 
-	public Author getAuthor() {
-		return author;
-	}
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 }

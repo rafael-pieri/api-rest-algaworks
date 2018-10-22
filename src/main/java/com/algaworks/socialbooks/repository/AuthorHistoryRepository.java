@@ -1,16 +1,12 @@
 package com.algaworks.socialbooks.repository;
 
 import com.algaworks.socialbooks.model.author.AuthorHistory;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.repository.Repository;
 
-public interface AuthorHistoryRepository extends Repository<AuthorHistory, UUID> {
+public interface AuthorHistoryRepository extends JpaRepository<AuthorHistory, UUID> {
 
-//    Optional<AuthorHistory> findOne(UUID id);
-//
-//    Optional<List<AuthorHistory>> findAll();
-
-    Optional<AuthorHistory> save(AuthorHistory author);
+    Optional<AuthorHistory> findTopByAuthorIdOrderByCreatedAtDesc(UUID authorId);
 }

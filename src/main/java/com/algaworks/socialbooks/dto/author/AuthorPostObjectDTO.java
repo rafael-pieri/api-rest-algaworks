@@ -1,20 +1,13 @@
-package com.algaworks.socialbooks.dto;
+package com.algaworks.socialbooks.dto.author;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 public class AuthorPostObjectDTO {
 
     @NotEmpty(message = "The field name is required.")
     private String name;
-
-    @ApiModelProperty(required = true, example = "2018-01-01")
-    @NotNull(message = "The field birth is required.")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birth;
 
     @NotNull(message = "The field nationality is required.")
     private String nationality;
@@ -25,14 +18,6 @@ public class AuthorPostObjectDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
     }
 
     public String getNationality() {
@@ -47,17 +32,12 @@ public class AuthorPostObjectDTO {
 
         private AuthorPostObjectDTO authorPostObjectDTO = new AuthorPostObjectDTO();
 
-        public AuthorPostObjectBuilderDTO withName(String name) {
+        public AuthorPostObjectBuilderDTO withName(final String name) {
             this.authorPostObjectDTO.name = name;
             return this;
         }
 
-        public AuthorPostObjectBuilderDTO withBirth(Date birth) {
-            this.authorPostObjectDTO.birth = birth;
-            return this;
-        }
-
-        public AuthorPostObjectBuilderDTO withNationality(String nationality) {
+        public AuthorPostObjectBuilderDTO withNationality(final String nationality) {
             this.authorPostObjectDTO.nationality = nationality;
             return this;
         }

@@ -5,8 +5,8 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/socialbooksDB?createDatabaseIfNotExist=true
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/socialbooksDB?createDatabaseIfNotExist=true&useSSL=false&requireSSL=false
     username: root
     password: root
   jpa:

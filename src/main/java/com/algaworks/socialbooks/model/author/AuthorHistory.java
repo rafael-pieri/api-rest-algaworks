@@ -1,18 +1,15 @@
 package com.algaworks.socialbooks.model.author;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.UUID;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 public class AuthorHistory {
@@ -31,14 +28,10 @@ public class AuthorHistory {
     private String name;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date birth;
-
-    @NotNull
     private String nationality;
 
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
-    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneOffset.UTC);
+    private ZonedDateTime createdAt;
 
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
     private ZonedDateTime deletedAt;
@@ -51,20 +44,20 @@ public class AuthorHistory {
         this.id = id;
     }
 
+    public UUID getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(UUID authorId) {
+        this.authorId = authorId;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
     }
 
     public String getNationality() {
@@ -95,32 +88,32 @@ public class AuthorHistory {
 
         private AuthorHistory authorHistory = new AuthorHistory();
 
-        public AuthorHistoryBuilder withAuthorId(UUID authorId) {
+        public AuthorHistoryBuilder withId(final UUID id) {
+            this.authorHistory.id = id;
+            return this;
+        }
+
+        public AuthorHistoryBuilder withAuthorId(final UUID authorId) {
             this.authorHistory.authorId = authorId;
             return this;
         }
 
-        public AuthorHistoryBuilder withName(String name) {
+        public AuthorHistoryBuilder withName(final String name) {
             this.authorHistory.name = name;
             return this;
         }
 
-        public AuthorHistoryBuilder withBirth(Date birth) {
-            this.authorHistory.birth = birth;
-            return this;
-        }
-
-        public AuthorHistoryBuilder withNationality(String nationality) {
+        public AuthorHistoryBuilder withNationality(final String nationality) {
             this.authorHistory.nationality = nationality;
             return this;
         }
 
-        public AuthorHistoryBuilder withCreatedAt(ZonedDateTime createdAt) {
+        public AuthorHistoryBuilder withCreatedAt(final ZonedDateTime createdAt) {
             this.authorHistory.createdAt = createdAt;
             return this;
         }
 
-        public AuthorHistoryBuilder withDeletedAt(ZonedDateTime deletedAt) {
+        public AuthorHistoryBuilder withDeletedAt(final ZonedDateTime deletedAt) {
             this.authorHistory.deletedAt = deletedAt;
             return this;
         }

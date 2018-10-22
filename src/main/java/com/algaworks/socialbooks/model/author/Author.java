@@ -1,23 +1,15 @@
 package com.algaworks.socialbooks.model.author;
 
 import com.algaworks.socialbooks.model.book.Book;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Author {
@@ -32,14 +24,10 @@ public class Author {
     private String name;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date birth;
-
-    @NotNull
     private String nationality;
 
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
-    private ZonedDateTime modifiedAt = ZonedDateTime.now(ZoneOffset.UTC);
+    private ZonedDateTime modifiedAt;
 
     @OneToMany(mappedBy = "author")
     private List<Book> books;
@@ -58,14 +46,6 @@ public class Author {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
     }
 
     public String getNationality() {
@@ -96,23 +76,23 @@ public class Author {
 
         private Author author = new Author();
 
-        public AuthorBuilder withId(UUID id) {
+        public AuthorBuilder withId(final UUID id) {
             this.author.id = id;
             return this;
         }
 
-        public AuthorBuilder withName(String name) {
+        public AuthorBuilder withName(final String name) {
             this.author.name = name;
             return this;
         }
 
-        public AuthorBuilder withBirth(Date birth) {
-            this.author.birth = birth;
+        public AuthorBuilder withNationality(final String nationality) {
+            this.author.nationality = nationality;
             return this;
         }
 
-        public AuthorBuilder withNationality(String nationality) {
-            this.author.nationality = nationality;
+        public AuthorBuilder withModifiedAt(final ZonedDateTime modifiedAt) {
+            this.author.modifiedAt = modifiedAt;
             return this;
         }
 

@@ -1,17 +1,10 @@
 package com.algaworks.socialbooks.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.algaworks.socialbooks.model.author.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.UUID;
-import org.springframework.data.repository.Repository;
 
-public interface AuthorRepository extends Repository<Author, UUID> {
+public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
-    Optional<Author> findOne(UUID id);
-
-    Optional<List<Author>> findAll();
-
-    Optional<Author> save(Author author);
 }

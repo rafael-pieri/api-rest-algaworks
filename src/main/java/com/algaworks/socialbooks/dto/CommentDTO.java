@@ -1,18 +1,15 @@
 package com.algaworks.socialbooks.dto;
 
 import com.algaworks.socialbooks.model.book.Book;
+
 import java.util.Date;
 
 public class CommentDTO {
 
     private Long id;
-
     private String text;
-
     private String user;
-
     private Date date;
-
     private Book book;
 
     public Long getId() {

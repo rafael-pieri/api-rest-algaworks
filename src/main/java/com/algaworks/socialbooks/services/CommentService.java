@@ -26,25 +26,26 @@ public class CommentService {
     }
 
     public void saveComment(Long bookId, Comment comment) {
-        Optional<Book> book = bookRepository.findById(bookId);
-
-        if (!book.isPresent()) {
-            throw new BookNotFoundException("The book could not be found.");
-        }
-
-        comment.setBook(book.get());
-        comment.setDate(new Date());
-
-        commentRepository.save(comment);
+//        Optional<Book> book = bookRepository.findById(bookId);
+//
+//        if (!book.isPresent()) {
+//            throw new BookNotFoundException("The book could not be found.");
+//        }
+//
+//        comment.setBook(book.get());
+//        comment.setDate(new Date());
+//
+//        commentRepository.save(comment);
     }
 
     public List<Comment> listComment(Long bookId) {
-        Optional<Book> book = bookRepository.findById(bookId);
+//        Optional<Book> book = bookRepository.findById(bookId);
 
-        if (!book.isPresent()) {
-            throw new BookNotFoundException("The book could not be found.");
-        }
-
-        return book.get().getComments();
+//        if (!book.isPresent()) {
+//            throw new BookNotFoundException("The book could not be found.");
+//        }
+//
+//        return book.get().getComments();
+        return null;
     }
 }

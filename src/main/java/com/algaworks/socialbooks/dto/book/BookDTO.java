@@ -20,16 +20,6 @@ public class BookDTO {
 
     }
 
-    public BookDTO(Long id, String name, Date publication, String publisher, String summary, List<Comment> comments, AuthorDTO author) {
-        this.id = id;
-        this.name = name;
-        this.publication = publication;
-        this.publisher = publisher;
-        this.summary = summary;
-        this.comments = comments;
-        this.author = author;
-    }
-
     public Long getId() {
         return id;
     }

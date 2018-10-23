@@ -72,8 +72,9 @@ public class AuthorService {
         return new AuthorCreateDTO(createdAuthor.getId(), createdAuthor.getModifiedAt());
     }
 
-    public AuthorCreateDTO update(final UUID id, final AuthorPutObjectDTO authorPutObjectDTO) {
-        Optional<Author> optionalAuthor = authorRepository.findById(id);
+    public AuthorCreateDTO update(final UUID id,
+                                  final AuthorPutObjectDTO authorPutObjectDTO) {
+        final Optional<Author> optionalAuthor = authorRepository.findById(id);
 
         if (!optionalAuthor.isPresent()) {
             throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
@@ -86,7 +87,7 @@ public class AuthorService {
                 .withModifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
                 .build();
 
-        final Author createdAuthor = authorRepository.save(author);
+        final Author updatedAuthor = authorRepository.save(author);
 
         final AuthorHistory authorHistory = new AuthorHistory.AuthorHistoryBuilder()
                 .withAuthorId(author.getId())
@@ -97,7 +98,7 @@ public class AuthorService {
 
         authorHistoryService.createOrUpdate(authorHistory);
 
-        return new AuthorCreateDTO(createdAuthor.getId(), createdAuthor.getModifiedAt());
+        return new AuthorCreateDTO(updatedAuthor.getId(), updatedAuthor.getModifiedAt());
     }
 
     public void delete(final UUID id) {
@@ -111,7 +112,7 @@ public class AuthorService {
     }
 
     private void softDeleteAuthorHistoryById(final UUID id) {
-        Optional<AuthorHistory> optionalAuthorHistory = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
+        final Optional<AuthorHistory> optionalAuthorHistory = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
 
         if (optionalAuthorHistory.isPresent()) {
             final AuthorHistory authorHistory = optionalAuthorHistory.get();

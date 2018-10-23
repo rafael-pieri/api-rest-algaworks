@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -46,12 +47,11 @@ public class Book {
     @JsonInclude(Include.NON_NULL)
     private Author author;
 
+    @Type(type = "org.hibernate.type.ZonedDateTimeType")
+    private ZonedDateTime modifiedAt;
+
     public Book() {
 
-    }
-
-    public Book(String name) {
-        this.name = name;
     }
 
     public UUID getId() {
@@ -108,6 +108,14 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public ZonedDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(ZonedDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 
     public static class BookBuilder {

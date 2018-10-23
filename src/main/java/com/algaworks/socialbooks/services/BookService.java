@@ -1,13 +1,14 @@
 package com.algaworks.socialbooks.services;
 
-import com.algaworks.socialbooks.dto.author.AuthorDTO;
+import com.algaworks.socialbooks.dto.book.BookCreateDTO;
 import com.algaworks.socialbooks.dto.book.BookDTO;
 import com.algaworks.socialbooks.dto.book.BookPostObjectDTO;
-import com.algaworks.socialbooks.dto.book.BookUpdateDTO;
+import com.algaworks.socialbooks.dto.book.BookPutObjectDTO;
 import com.algaworks.socialbooks.exceptions.AuthorNotFoundException;
 import com.algaworks.socialbooks.exceptions.BookNotFoundException;
 import com.algaworks.socialbooks.model.author.Author;
 import com.algaworks.socialbooks.model.book.Book;
+import com.algaworks.socialbooks.model.book.BookHistory;
 import com.algaworks.socialbooks.repository.AuthorRepository;
 import com.algaworks.socialbooks.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
@@ -57,8 +58,8 @@ public class BookService {
         return bookDTO;
     }
 
-    public BookDTO save(final BookPostObjectDTO bookPostObjectDTO) {
-        Optional<Author> author = authorRepository.findById(bookPostObjectDTO.getAuthorId());
+    public BookCreateDTO save(final BookPostObjectDTO bookPostObjectDTO) {
+        final Optional<Author> author = authorRepository.findById(bookPostObjectDTO.getAuthorId());
 
         if (!author.isPresent()) {
             throw new AuthorNotFoundException(String.format("The author with id %s could not be found", bookPostObjectDTO.getAuthorId()));
@@ -72,20 +73,57 @@ public class BookService {
                 .withAuthor(author.get())
                 .build();
 
-        Book save = bookRepository.save(book);
+        final Book createdBook = bookRepository.save(book);
 
-        AuthorDTO authorDTO = new AuthorDTO.AuthorBuilderDTO()
-                .withId(author.get().getId())
-                .withName(author.get().getName())
-                .withNationality(author.get().getNationality())
+        final BookHistory bookHistory = new BookHistory.BookHistoryBuilder()
+                .withName(createdBook.getName())
+                .withPublication(createdBook.getPublication())
+                .withPublisher(createdBook.getPublisher())
+                .withSummary(createdBook.getSummary())
+                .withAuthor(createdBook.getAuthor())
                 .build();
 
-        BookDTO bookDTO = new BookDTO(save.getId(), save.getName(), save.getPublication(), save.getPublisher(), save.getSummary(),
-                save.getComments(), authorDTO);
+        bookHistoryService.createOrUpdate(bookHistory);
 
-//        BeanUtils.copyProperties(bookRepository.createOrUpdate(book), bookDTO);
+        return new BookCreateDTO(createdBook.getId(), createdBook.getModifiedAt());
+    }
 
-        return bookDTO;
+    public BookCreateDTO update(final UUID id, final BookPutObjectDTO bookPutObjectDTO) {
+        final Optional<Book> optionalBook = bookRepository.findById(id);
+
+        if (!optionalBook.isPresent()) {
+            throw new BookNotFoundException(String.format("The book with id %s could not be found", id));
+        }
+
+        final Optional<Author> author = authorRepository.findById(bookPutObjectDTO.getAuthorId());
+
+        if (!author.isPresent()) {
+            throw new AuthorNotFoundException(String.format("The author with id %s could not be found", bookPutObjectDTO.getAuthorId()));
+        }
+
+        final Book book = new Book.BookBuilder()
+                .withId(id)
+                .withName(bookPutObjectDTO.getName())
+                .withPublication(bookPutObjectDTO.getPublication())
+                .withPublisher(bookPutObjectDTO.getPublisher())
+                .withSummary(bookPutObjectDTO.getSummary())
+                .withAuthor(author.get())
+                .build();
+
+        final Book updatedBook = bookRepository.save(book);
+
+        final BookHistory bookHistory = new BookHistory.BookHistoryBuilder()
+                .withName(updatedBook.getName())
+                .withPublication(updatedBook.getPublication())
+                .withPublisher(updatedBook.getPublisher())
+                .withSummary(updatedBook.getSummary())
+                .withAuthor(updatedBook.getAuthor())
+                .build();
+
+        bookHistoryService.createOrUpdate(bookHistory);
+
+        return new BookCreateDTO(updatedBook.getId(), updatedBook.getModifiedAt());
+
     }
 
     public void delete(final UUID id) {
@@ -94,25 +132,26 @@ public class BookService {
         }
 
         bookRepository.deleteById(id);
+
+        softDeleteBookHistoryById(id);
     }
 
-    public void update(final Long id, final BookUpdateDTO bookUpdateDTO) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
+    private void softDeleteBookHistoryById(final UUID id) {
+        final Optional<BookHistory> optionalBookHistory = bookHistoryService.findTopByBookIdOrderByCreatedAtDesc(id);
 
-        if (!optionalBook.isPresent()) {
-            throw new BookNotFoundException("The book could not be found.");
+        if (optionalBookHistory.isPresent()) {
+            final BookHistory bookHistory = optionalBookHistory.get();
+
+            final BookHistory updatedBookHistory = new BookHistory.BookHistoryBuilder()
+                    .withId(bookHistory.getId())
+                    .withName(bookHistory.getName())
+                    .withPublication(bookHistory.getPublication())
+                    .withPublisher(bookHistory.getPublisher())
+                    .withSummary(bookHistory.getSummary())
+                    .withAuthor(bookHistory.getAuthor())
+                    .build();
+
+            bookHistoryService.createOrUpdate(updatedBookHistory);
         }
-
-        final Book book = new Book.BookBuilder()
-                .withId(id)
-                .withName(bookUpdateDTO.getName())
-                .withPublication(bookUpdateDTO.getPublication())
-                .withPublisher(bookUpdateDTO.getPublisher())
-                .withSummary(bookUpdateDTO.getSummary())
-                .withComments(bookUpdateDTO.getComments())
-                .withAuthor(bookUpdateDTO.getAuthor())
-                .build();
-
-        bookRepository.save(book);
     }
 }

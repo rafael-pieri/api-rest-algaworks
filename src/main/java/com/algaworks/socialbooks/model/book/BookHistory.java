@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +46,12 @@ public class BookHistory {
     @JoinColumn(name = "AUTHOR_ID")
     @JsonInclude(Include.NON_NULL)
     private Author author;
+
+    @Type(type = "org.hibernate.type.ZonedDateTimeType")
+    private ZonedDateTime createdAt;
+
+    @Type(type = "org.hibernate.type.ZonedDateTimeType")
+    private ZonedDateTime deletedAt;
 
     public BookHistory() {
 
@@ -110,6 +117,22 @@ public class BookHistory {
         this.author = author;
     }
 
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(ZonedDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     public static class BookHistoryBuilder {
 
         private BookHistory bookHistory = new BookHistory();
@@ -146,6 +169,16 @@ public class BookHistory {
 
         public BookHistoryBuilder withAuthor(final Author author) {
             this.bookHistory.author = author;
+            return this;
+        }
+
+        public BookHistoryBuilder withCreatedAt(final ZonedDateTime createdAt) {
+            this.bookHistory.createdAt = createdAt;
+            return this;
+        }
+
+        public BookHistoryBuilder withDeletedAt(final ZonedDateTime deletedAt) {
+            this.bookHistory.deletedAt = deletedAt;
             return this;
         }
 

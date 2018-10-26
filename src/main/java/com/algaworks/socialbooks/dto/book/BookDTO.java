@@ -2,77 +2,26 @@ package com.algaworks.socialbooks.dto.book;
 
 import com.algaworks.socialbooks.dto.author.AuthorDTO;
 import com.algaworks.socialbooks.model.book.Comment;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+@Setter
+@Getter
+@Builder
+@JsonPropertyOrder({"id", "name", "publication", "publisher", "summary", "author", "comments"})
 public class BookDTO {
 
-    private Long id;
+    private UUID id;
     private String name;
     private Date publication;
     private String publisher;
     private String summary;
-    private List<Comment> comments;
     private AuthorDTO author;
-
-    public BookDTO() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getPublication() {
-        return publication;
-    }
-
-    public void setPublication(Date publication) {
-        this.publication = publication;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public AuthorDTO getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(AuthorDTO author) {
-        this.author = author;
-    }
+    private List<Comment> comments;
 }

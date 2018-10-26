@@ -25,7 +25,7 @@ public class BookController {
     private BookService bookService;
 
     @CrossOrigin
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public Collection<BookDTO> list() {
         return bookService.list();

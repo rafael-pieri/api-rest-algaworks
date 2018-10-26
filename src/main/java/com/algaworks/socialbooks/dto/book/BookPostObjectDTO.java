@@ -1,8 +1,17 @@
 package com.algaworks.socialbooks.dto.book;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 import java.util.UUID;
 
+@Getter
+@Setter
+@Builder
 public class BookPostObjectDTO {
 
     private String name;
@@ -11,47 +20,16 @@ public class BookPostObjectDTO {
     private String summary;
     private UUID authorId;
 
-    public BookPostObjectDTO() {
-
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    @JsonCreator
+    public BookPostObjectDTO(@JsonProperty("name") final String name,
+                             @JsonProperty("publication") final Date publication,
+                             @JsonProperty("publisher") final String publisher,
+                             @JsonProperty("summary") final String summary,
+                             @JsonProperty("authorId") final UUID authorId) {
         this.name = name;
-    }
-
-    public Date getPublication() {
-        return publication;
-    }
-
-    public void setPublication(Date publication) {
         this.publication = publication;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
         this.publisher = publisher;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
         this.summary = summary;
-    }
-
-    public UUID getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(UUID authorId) {
         this.authorId = authorId;
     }
 }

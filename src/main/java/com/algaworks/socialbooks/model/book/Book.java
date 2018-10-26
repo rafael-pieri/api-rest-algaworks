@@ -147,13 +147,13 @@ public class Book {
             return this;
         }
 
-        public BookBuilder withComments(final List<Comment> comments) {
-            this.book.comments = comments;
+        public BookBuilder withAuthor(final Author author) {
+            this.book.author = author;
             return this;
         }
 
-        public BookBuilder withAuthor(final Author author) {
-            this.book.author = author;
+        public BookBuilder withModifiedAt(final ZonedDateTime modifiedAt) {
+            this.book.modifiedAt = modifiedAt;
             return this;
         }
 

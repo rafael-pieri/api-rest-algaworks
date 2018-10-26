@@ -1,42 +1,23 @@
 package com.algaworks.socialbooks.dto.author;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
 public class AuthorPutObjectDTO {
 
     private String name;
     private String nationality;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    @JsonCreator
+    public AuthorPutObjectDTO(@JsonProperty("name") final String name,
+                              @JsonProperty("nationality") final String nationality) {
         this.name = name;
-    }
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
         this.nationality = nationality;
-    }
-
-    public static class AuthorPostObjectBuilderDTO {
-
-        private AuthorPutObjectDTO authorPostObjectDTO = new AuthorPutObjectDTO();
-
-        public AuthorPostObjectBuilderDTO withName(final String name) {
-            this.authorPostObjectDTO.name = name;
-            return this;
-        }
-
-        public AuthorPostObjectBuilderDTO withNationality(final String nationality) {
-            this.authorPostObjectDTO.nationality = nationality;
-            return this;
-        }
-
-        public AuthorPutObjectDTO build() {
-            return this.authorPostObjectDTO;
-        }
     }
 }

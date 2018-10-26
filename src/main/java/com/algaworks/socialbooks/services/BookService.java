@@ -1,5 +1,6 @@
 package com.algaworks.socialbooks.services;
 
+import com.algaworks.socialbooks.dto.author.AuthorDTO;
 import com.algaworks.socialbooks.dto.book.BookCreateDTO;
 import com.algaworks.socialbooks.dto.book.BookDTO;
 import com.algaworks.socialbooks.dto.book.BookPostObjectDTO;
@@ -11,14 +12,12 @@ import com.algaworks.socialbooks.model.book.Book;
 import com.algaworks.socialbooks.model.book.BookHistory;
 import com.algaworks.socialbooks.repository.AuthorRepository;
 import com.algaworks.socialbooks.repository.BookRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -37,25 +36,57 @@ public class BookService {
     }
 
     public Collection<BookDTO> list() {
-        ArrayList<BookDTO> bookDTO = new ArrayList<>();
+        final List<Book> books = bookRepository.findAll();
 
-        BeanUtils.copyProperties(bookRepository.findAll(), bookDTO);
+        final ArrayList<BookDTO> bookDTOS = new ArrayList<>();
 
-        return bookDTO;
+        books.forEach(book -> {
+            final AuthorDTO authorDTO = AuthorDTO.builder()
+                    .id(book.getAuthor().getId())
+                    .name(book.getAuthor().getName())
+                    .nationality(book.getAuthor().getNationality())
+                    .build();
+
+            final BookDTO bookDTO = BookDTO.builder()
+                    .id(book.getId())
+                    .name(book.getName())
+                    .publication(book.getPublication())
+                    .publisher(book.getPublisher())
+                    .summary(book.getSummary())
+                    .author(authorDTO)
+                    .comments(book.getComments())
+                    .build();
+
+            bookDTOS.add(bookDTO);
+        });
+
+        return bookDTOS;
     }
 
     public BookDTO findById(final UUID id) {
-        final Optional<Book> book = bookRepository.findById(id);
+        final Optional<Book> optionalBook = bookRepository.findById(id);
 
-        if (!book.isPresent()) {
+        if (!optionalBook.isPresent()) {
             throw new BookNotFoundException(String.format("The book with id %s could not be found.", id));
         }
 
-        BookDTO bookDTO = new BookDTO();
+        final Book book = optionalBook.get();
 
-        BeanUtils.copyProperties(book.get(), bookDTO);
+        final AuthorDTO authorDTO = AuthorDTO.builder()
+                .id(book.getAuthor().getId())
+                .name(book.getAuthor().getName())
+                .nationality(book.getAuthor().getNationality())
+                .build();
 
-        return bookDTO;
+        return BookDTO.builder()
+                .id(book.getId())
+                .name(book.getName())
+                .publication(book.getPublication())
+                .publisher(book.getPublisher())
+                .summary(book.getSummary())
+                .author(authorDTO)
+                .comments(book.getComments())
+                .build();
     }
 
     public BookCreateDTO save(final BookPostObjectDTO bookPostObjectDTO) {
@@ -71,6 +102,7 @@ public class BookService {
                 .withPublisher(bookPostObjectDTO.getPublisher())
                 .withSummary(bookPostObjectDTO.getSummary())
                 .withAuthor(author.get())
+                .withModifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
                 .build();
 
         final Book createdBook = bookRepository.save(book);
@@ -81,6 +113,7 @@ public class BookService {
                 .withPublisher(createdBook.getPublisher())
                 .withSummary(createdBook.getSummary())
                 .withAuthor(createdBook.getAuthor())
+                .withCreatedAt(createdBook.getModifiedAt())
                 .build();
 
         bookHistoryService.createOrUpdate(bookHistory);
@@ -108,6 +141,7 @@ public class BookService {
                 .withPublisher(bookPutObjectDTO.getPublisher())
                 .withSummary(bookPutObjectDTO.getSummary())
                 .withAuthor(author.get())
+                .withModifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
                 .build();
 
         final Book updatedBook = bookRepository.save(book);
@@ -118,6 +152,7 @@ public class BookService {
                 .withPublisher(updatedBook.getPublisher())
                 .withSummary(updatedBook.getSummary())
                 .withAuthor(updatedBook.getAuthor())
+                .withCreatedAt(updatedBook.getModifiedAt())
                 .build();
 
         bookHistoryService.createOrUpdate(bookHistory);
@@ -149,6 +184,8 @@ public class BookService {
                     .withPublisher(bookHistory.getPublisher())
                     .withSummary(bookHistory.getSummary())
                     .withAuthor(bookHistory.getAuthor())
+                    .withCreatedAt(bookHistory.getCreatedAt())
+                    .withDeletedAt(ZonedDateTime.now(ZoneOffset.UTC))
                     .build();
 
             bookHistoryService.createOrUpdate(updatedBookHistory);

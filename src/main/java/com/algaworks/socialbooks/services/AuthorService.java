@@ -44,10 +44,10 @@ public class AuthorService {
 
         final Author selectedAuthor = author.get();
 
-        return new AuthorDTO.AuthorBuilderDTO()
-                .withId(selectedAuthor.getId())
-                .withName(selectedAuthor.getName())
-                .withNationality(selectedAuthor.getNationality())
+        return AuthorDTO.builder()
+                .id(selectedAuthor.getId())
+                .name(selectedAuthor.getName())
+                .nationality(selectedAuthor.getNationality())
                 .build();
     }
 

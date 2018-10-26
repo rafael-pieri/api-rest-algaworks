@@ -4,7 +4,6 @@ import com.algaworks.socialbooks.dto.author.AuthorCreateDTO;
 import com.algaworks.socialbooks.dto.author.AuthorDTO;
 import com.algaworks.socialbooks.dto.author.AuthorPostObjectDTO;
 import com.algaworks.socialbooks.dto.author.AuthorPutObjectDTO;
-import com.algaworks.socialbooks.model.author.Author;
 import com.algaworks.socialbooks.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class AuthorController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public Collection<Author> findAll() {
+    public Collection<AuthorDTO> findAll() {
         return authorService.findAll();
     }
 

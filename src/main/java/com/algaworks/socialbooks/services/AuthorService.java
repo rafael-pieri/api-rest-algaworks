@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthorService {
@@ -31,23 +28,37 @@ public class AuthorService {
         this.authorHistoryService = authorHistoryService;
     }
 
-    public Collection<Author> findAll() {
-        return new ArrayList<>(authorRepository.findAll());
+    public Collection<AuthorDTO> findAll() {
+        final List<Author> authors = authorRepository.findAll();
+
+        final ArrayList<AuthorDTO> authorDTOS = new ArrayList<>();
+
+        authors.forEach(author -> {
+            final AuthorDTO authorDTO = AuthorDTO.builder()
+                    .id(author.getId())
+                    .name(author.getName())
+                    .nationality(author.getNationality())
+                    .build();
+
+            authorDTOS.add(authorDTO);
+        });
+
+        return authorDTOS;
     }
 
     public AuthorDTO findById(final UUID id) {
-        final Optional<Author> author = authorRepository.findById(id);
+        final Optional<Author> optionalAuthor = authorRepository.findById(id);
 
-        if (!author.isPresent()) {
+        if (!optionalAuthor.isPresent()) {
             throw new AuthorNotFoundException("The author could not be found.");
         }
 
-        final Author selectedAuthor = author.get();
+        final Author author = optionalAuthor.get();
 
         return AuthorDTO.builder()
-                .id(selectedAuthor.getId())
-                .name(selectedAuthor.getName())
-                .nationality(selectedAuthor.getNationality())
+                .id(author.getId())
+                .name(author.getName())
+                .nationality(author.getNationality())
                 .build();
     }
 

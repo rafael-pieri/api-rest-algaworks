@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Setter
 @Getter
+@Setter
 @Builder
 @JsonPropertyOrder({"id", "name", "publication", "publisher", "summary", "author", "comments"})
 public class BookDTO {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CommentService {
@@ -25,27 +26,26 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public void saveComment(Long bookId, Comment comment) {
-//        Optional<Book> book = bookRepository.findById(bookId);
-//
-//        if (!book.isPresent()) {
-//            throw new BookNotFoundException("The book could not be found.");
-//        }
-//
-//        comment.setBook(book.get());
-//        comment.setDate(new Date());
-//
-//        commentRepository.save(comment);
+    public void saveComment(final UUID bookId, final Comment comment) {
+        final Optional<Book> bookOptional = bookRepository.findById(bookId);
+
+        if (!bookOptional.isPresent()) {
+            throw new BookNotFoundException("The book could not be found.");
+        }
+
+        comment.setBook(bookOptional.get());
+        comment.setDate(new Date());
+
+        commentRepository.save(comment);
     }
 
-    public List<Comment> listComment(Long bookId) {
-//        Optional<Book> book = bookRepository.findById(bookId);
+    public List<Comment> listComment(final UUID bookId) {
+        final Optional<Book> bookOptional = bookRepository.findById(bookId);
 
-//        if (!book.isPresent()) {
-//            throw new BookNotFoundException("The book could not be found.");
-//        }
-//
-//        return book.get().getComments();
-        return null;
+        if (!bookOptional.isPresent()) {
+            throw new BookNotFoundException("The book could not be found.");
+        }
+
+        return bookOptional.get().getComments();
     }
 }

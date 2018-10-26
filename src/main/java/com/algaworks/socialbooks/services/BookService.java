@@ -64,13 +64,13 @@ public class BookService {
     }
 
     public BookDTO findById(final UUID id) {
-        final Optional<Book> optionalBook = bookRepository.findById(id);
+        final Optional<Book> bookOptional = bookRepository.findById(id);
 
-        if (!optionalBook.isPresent()) {
+        if (!bookOptional.isPresent()) {
             throw new BookNotFoundException(String.format("The book with id %s could not be found.", id));
         }
 
-        final Book book = optionalBook.get();
+        final Book book = bookOptional.get();
 
         final AuthorDTO authorDTO = AuthorDTO.builder()
                 .id(book.getAuthor().getId())
@@ -122,9 +122,9 @@ public class BookService {
     }
 
     public BookCreateDTO update(final UUID id, final BookPutObjectDTO bookPutObjectDTO) {
-        final Optional<Book> optionalBook = bookRepository.findById(id);
+        final Optional<Book> bookOptional = bookRepository.findById(id);
 
-        if (!optionalBook.isPresent()) {
+        if (!bookOptional.isPresent()) {
             throw new BookNotFoundException(String.format("The book with id %s could not be found", id));
         }
 
@@ -172,10 +172,10 @@ public class BookService {
     }
 
     private void softDeleteBookHistoryById(final UUID id) {
-        final Optional<BookHistory> optionalBookHistory = bookHistoryService.findTopByBookIdOrderByCreatedAtDesc(id);
+        final Optional<BookHistory> bookHistoryOptional = bookHistoryService.findTopByBookIdOrderByCreatedAtDesc(id);
 
-        if (optionalBookHistory.isPresent()) {
-            final BookHistory bookHistory = optionalBookHistory.get();
+        if (bookHistoryOptional.isPresent()) {
+            final BookHistory bookHistory = bookHistoryOptional.get();
 
             final BookHistory updatedBookHistory = new BookHistory.BookHistoryBuilder()
                     .withId(bookHistory.getId())

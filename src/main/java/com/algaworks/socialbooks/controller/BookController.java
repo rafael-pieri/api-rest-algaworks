@@ -34,12 +34,12 @@ public class BookController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public BookCreateDTO save(@Valid @RequestBody BookPostObjectDTO bookPostObjectDTO) {
+    public BookCreateDTO save(@Valid @RequestBody final BookPostObjectDTO bookPostObjectDTO) {
         return bookService.save(bookPostObjectDTO);
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<BookDTO> findById(@PathVariable("id") UUID id) {
+    public ResponseEntity<BookDTO> findById(@PathVariable("id") final UUID id) {
         final BookDTO book = bookService.findById(id);
         final CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
         return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(book);
@@ -47,13 +47,13 @@ public class BookController {
 
     @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") UUID id) {
+    public void delete(@PathVariable("id") final UUID id) {
         bookService.delete(id);
     }
 
     @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public BookCreateDTO update(@PathVariable("id") UUID id, @RequestBody BookPutObjectDTO bookPutObjectDTO) {
+    public BookCreateDTO update(@PathVariable("id") final UUID id, @RequestBody final BookPutObjectDTO bookPutObjectDTO) {
         return bookService.update(id, bookPutObjectDTO);
     }
 }

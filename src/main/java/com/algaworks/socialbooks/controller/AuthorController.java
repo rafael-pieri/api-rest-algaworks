@@ -29,26 +29,26 @@ public class AuthorController {
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public AuthorDTO findById(@PathVariable("id") UUID id) {
+    public AuthorDTO findById(@PathVariable("id") final UUID id) {
         return authorService.findById(id);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorCreateDTO save(@Valid @RequestBody AuthorPostObjectDTO authorPostObjectDTO) {
+    public AuthorCreateDTO save(@Valid @RequestBody final AuthorPostObjectDTO authorPostObjectDTO) {
         return authorService.save(authorPostObjectDTO);
     }
 
     @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public AuthorCreateDTO update(@PathVariable("id") UUID id, @RequestBody AuthorPutObjectDTO authorPutObjectDTO) {
+    public AuthorCreateDTO update(@PathVariable("id") final UUID id, @RequestBody final AuthorPutObjectDTO authorPutObjectDTO) {
         return authorService.update(id, authorPutObjectDTO);
     }
 
     @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") UUID id) {
+    public void delete(@PathVariable("id") final UUID id) {
         authorService.delete(id);
     }
 }

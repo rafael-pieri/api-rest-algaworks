@@ -47,13 +47,13 @@ public class AuthorService {
     }
 
     public AuthorDTO findById(final UUID id) {
-        final Optional<Author> optionalAuthor = authorRepository.findById(id);
+        final Optional<Author> authorOptional = authorRepository.findById(id);
 
-        if (!optionalAuthor.isPresent()) {
+        if (!authorOptional.isPresent()) {
             throw new AuthorNotFoundException("The author could not be found.");
         }
 
-        final Author author = optionalAuthor.get();
+        final Author author = authorOptional.get();
 
         return AuthorDTO.builder()
                 .id(author.getId())
@@ -85,9 +85,9 @@ public class AuthorService {
 
     public AuthorCreateDTO update(final UUID id,
                                   final AuthorPutObjectDTO authorPutObjectDTO) {
-        final Optional<Author> optionalAuthor = authorRepository.findById(id);
+        final Optional<Author> authorOptional = authorRepository.findById(id);
 
-        if (!optionalAuthor.isPresent()) {
+        if (!authorOptional.isPresent()) {
             throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
         }
 
@@ -123,10 +123,10 @@ public class AuthorService {
     }
 
     private void softDeleteAuthorHistoryById(final UUID id) {
-        final Optional<AuthorHistory> optionalAuthorHistory = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
+        final Optional<AuthorHistory> authorHistoryOptional = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
 
-        if (optionalAuthorHistory.isPresent()) {
-            final AuthorHistory authorHistory = optionalAuthorHistory.get();
+        if (authorHistoryOptional.isPresent()) {
+            final AuthorHistory authorHistory = authorHistoryOptional.get();
 
             final AuthorHistory updatedAuthorHistory = new AuthorHistory.AuthorHistoryBuilder()
                     .withId(authorHistory.getId())

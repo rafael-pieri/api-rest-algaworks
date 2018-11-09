@@ -1,15 +1,16 @@
 package com.algaworks.socialbooks.model.author;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.UUID;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class AuthorHistory {
@@ -86,7 +87,7 @@ public class AuthorHistory {
 
     public static class AuthorHistoryBuilder {
 
-        private AuthorHistory authorHistory = new AuthorHistory();
+        private final AuthorHistory authorHistory = new AuthorHistory();
 
         public AuthorHistoryBuilder withId(final UUID id) {
             this.authorHistory.id = id;

@@ -1,5 +1,11 @@
 package com.algaworks.socialbooks.controller;
 
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import javax.validation.Valid;
+
 import com.algaworks.socialbooks.dto.book.BookCreateDTO;
 import com.algaworks.socialbooks.dto.book.BookDTO;
 import com.algaworks.socialbooks.dto.book.BookPostObjectDTO;
@@ -10,12 +16,16 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Collection;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/books")
@@ -28,19 +38,19 @@ public class BookController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public Collection<BookDTO> list() {
-        return bookService.list();
+        return this.bookService.list();
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces =
             {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public BookCreateDTO save(@Valid @RequestBody final BookPostObjectDTO bookPostObjectDTO) {
-        return bookService.save(bookPostObjectDTO);
+        return this.bookService.save(bookPostObjectDTO);
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<BookDTO> findById(@PathVariable("id") final UUID id) {
-        final BookDTO book = bookService.findById(id);
+        final BookDTO book = this.bookService.findById(id);
         final CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
         return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(book);
     }
@@ -48,12 +58,12 @@ public class BookController {
     @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") final UUID id) {
-        bookService.delete(id);
+        this.bookService.delete(id);
     }
 
     @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public BookCreateDTO update(@PathVariable("id") final UUID id, @RequestBody final BookPutObjectDTO bookPutObjectDTO) {
-        return bookService.update(id, bookPutObjectDTO);
+        return this.bookService.update(id, bookPutObjectDTO);
     }
 }

@@ -1,15 +1,19 @@
 package com.algaworks.socialbooks.model.author;
 
-import com.algaworks.socialbooks.model.book.Book;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.algaworks.socialbooks.model.book.Book;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Author {
@@ -36,7 +40,7 @@ public class Author {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(final UUID id) {
         this.id = id;
     }
 
@@ -44,7 +48,7 @@ public class Author {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -52,7 +56,7 @@ public class Author {
         return nationality;
     }
 
-    public void setNationality(String nationality) {
+    public void setNationality(final String nationality) {
         this.nationality = nationality;
     }
 
@@ -60,7 +64,7 @@ public class Author {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(final List<Book> books) {
         this.books = books;
     }
 
@@ -68,13 +72,13 @@ public class Author {
         return modifiedAt;
     }
 
-    public void setModifiedAt(ZonedDateTime modifiedAt) {
+    public void setModifiedAt(final ZonedDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 
     public static class AuthorBuilder {
 
-        private Author author = new Author();
+        private final  Author author = new Author();
 
         public AuthorBuilder withId(final UUID id) {
             this.author.id = id;

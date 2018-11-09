@@ -1,6 +1,5 @@
 package com.algaworks.socialbooks.model.book;
 
-import com.algaworks.socialbooks.model.book.Book;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,9 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +46,7 @@ public class Comment {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -56,7 +54,7 @@ public class Comment {
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
 
@@ -64,7 +62,7 @@ public class Comment {
 		return user;
 	}
 
-	public void setUser(String user) {
+	public void setUser(final String user) {
 		this.user = user;
 	}
 
@@ -72,7 +70,7 @@ public class Comment {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 
@@ -80,7 +78,7 @@ public class Comment {
 		return book;
 	}
 
-	public void setBook(Book book) {
+	public void setBook(final Book book) {
 		this.book = book;
 	}
 }

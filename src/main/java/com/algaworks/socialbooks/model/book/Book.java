@@ -1,19 +1,26 @@
 package com.algaworks.socialbooks.model.book;
 
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.algaworks.socialbooks.model.author.Author;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class Book {
@@ -50,15 +57,11 @@ public class Book {
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
     private ZonedDateTime modifiedAt;
 
-    public Book() {
-
-    }
-
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(final UUID id) {
         this.id = id;
     }
 
@@ -66,7 +69,7 @@ public class Book {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -74,7 +77,7 @@ public class Book {
         return publication;
     }
 
-    public void setPublication(Date publication) {
+    public void setPublication(final Date publication) {
         this.publication = publication;
     }
 
@@ -82,7 +85,7 @@ public class Book {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(final String publisher) {
         this.publisher = publisher;
     }
 
@@ -90,7 +93,7 @@ public class Book {
         return summary;
     }
 
-    public void setSummary(String summary) {
+    public void setSummary(final String summary) {
         this.summary = summary;
     }
 
@@ -98,7 +101,7 @@ public class Book {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(final List<Comment> comments) {
         this.comments = comments;
     }
 
@@ -106,7 +109,7 @@ public class Book {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(final Author author) {
         this.author = author;
     }
 
@@ -114,13 +117,13 @@ public class Book {
         return modifiedAt;
     }
 
-    public void setModifiedAt(ZonedDateTime modifiedAt) {
+    public void setModifiedAt(final ZonedDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 
     public static class BookBuilder {
 
-        private Book book = new Book();
+        private final Book book = new Book();
 
         public BookBuilder withId(final UUID id) {
             this.book.id = id;

@@ -4,7 +4,7 @@ import com.socialbooks.dto.book.BookCreateDTO;
 import com.socialbooks.dto.book.BookDTO;
 import com.socialbooks.dto.book.BookPostObjectDTO;
 import com.socialbooks.dto.book.BookPutObjectDTO;
-import com.socialbooks.services.BookService;
+import com.socialbooks.services.book.BookService;
 
 import javax.validation.Valid;
 import java.util.Collection;

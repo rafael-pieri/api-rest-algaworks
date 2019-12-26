@@ -1,4 +1,4 @@
-package com.socialbooks.services.histories;
+package com.socialbooks.services.author;
 
 import com.socialbooks.model.author.Author;
 import com.socialbooks.model.author.AuthorHistory;

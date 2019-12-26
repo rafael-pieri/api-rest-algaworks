@@ -4,7 +4,7 @@ import com.socialbooks.dto.author.AuthorCreateDTO;
 import com.socialbooks.dto.author.AuthorDTO;
 import com.socialbooks.dto.author.AuthorPostObjectDTO;
 import com.socialbooks.dto.author.AuthorPutObjectDTO;
-import com.socialbooks.services.AuthorService;
+import com.socialbooks.services.author.AuthorService;
 
 import javax.validation.Valid;
 import java.util.Collection;

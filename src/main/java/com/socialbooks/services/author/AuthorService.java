@@ -1,4 +1,6 @@
-package com.socialbooks.services;
+package com.socialbooks.services.author;
+
+import static java.lang.String.format;
 
 import com.socialbooks.dto.author.AuthorCreateDTO;
 import com.socialbooks.dto.author.AuthorDTO;
@@ -7,7 +9,6 @@ import com.socialbooks.dto.author.AuthorPutObjectDTO;
 import com.socialbooks.exceptions.AuthorNotFoundException;
 import com.socialbooks.model.author.Author;
 import com.socialbooks.repository.AuthorRepository;
-import com.socialbooks.services.histories.AuthorHistoryService;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -30,6 +31,15 @@ public class AuthorService {
         this.authorHistoryService = authorHistoryService;
     }
 
+    public Author getAuthor(UUID id) {
+        final Optional<Author> optionalAuthor = this.authorRepository.findById(id);
+
+        if (optionalAuthor.isPresent())
+            return optionalAuthor.get();
+
+        throw new AuthorNotFoundException(format("The author %s with id could not be found.", id));
+    }
+
     public Collection<AuthorDTO> findAll() {
         return this.authorRepository.findAll().stream()
                 .map(author -> AuthorDTO.builder()
@@ -41,18 +51,12 @@ public class AuthorService {
     }
 
     public AuthorDTO findById(final UUID id) {
-        final Optional<Author> authorOptional = this.authorRepository.findById(id);
-
-        if (authorOptional.isPresent()) {
-            final Author author = authorOptional.get();
-            return AuthorDTO.builder()
-                    .id(author.getId())
-                    .name(author.getName())
-                    .nationality(author.getNationality())
-                    .build();
-        }
-
-        throw new AuthorNotFoundException("The author could not be found.");
+        final Author author = getAuthor(id);
+        return AuthorDTO.builder()
+                .id(author.getId())
+                .name(author.getName())
+                .nationality(author.getNationality())
+                .build();
     }
 
     public AuthorCreateDTO save(final AuthorPostObjectDTO authorPostObjectDTO) {
@@ -71,33 +75,25 @@ public class AuthorService {
 
     public AuthorCreateDTO update(final UUID id,
                                   final AuthorPutObjectDTO authorPutObjectDTO) {
-        final Optional<Author> authorOptional = this.authorRepository.findById(id);
+        final Author author = getAuthor(id);
 
-        if (authorOptional.isPresent()) {
-            final Author updatedAuthor = this.authorRepository.save(
-                    Author.builder()
-                            .id(id)
-                            .name(authorPutObjectDTO.getName())
-                            .nationality(authorPutObjectDTO.getNationality())
-                            .modifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
-                            .build()
-            );
+        final Author updatedAuthor = this.authorRepository.save(
+                Author.builder()
+                        .id(author.getId())
+                        .name(authorPutObjectDTO.getName())
+                        .nationality(authorPutObjectDTO.getNationality())
+                        .modifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
+                        .build()
+        );
 
-            this.authorHistoryService.createOrUpdate(updatedAuthor);
+        this.authorHistoryService.createOrUpdate(updatedAuthor);
 
-            return new AuthorCreateDTO(updatedAuthor.getId(), updatedAuthor.getModifiedAt());
-        }
-
-        throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
+        return new AuthorCreateDTO(updatedAuthor.getId(), updatedAuthor.getModifiedAt());
     }
 
     public void delete(final UUID id) {
-        if (!this.authorRepository.findById(id).isPresent()) {
-            throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
-
-        }
-
-        this.authorRepository.deleteById(id);
-        this.authorHistoryService.softDeleteAuthorHistoryById(id);
+        final Author author = getAuthor(id);
+        this.authorRepository.deleteById(author.getId());
+        this.authorHistoryService.softDeleteAuthorHistoryById(author.getId());
     }
 }

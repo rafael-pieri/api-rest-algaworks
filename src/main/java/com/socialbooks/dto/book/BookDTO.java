@@ -1,12 +1,12 @@
 package com.socialbooks.dto.book;
 
-import com.socialbooks.dto.author.AuthorDTO;
-import com.socialbooks.model.book.Comment;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.socialbooks.dto.author.AuthorDTO;
+import com.socialbooks.model.book.Comment;
 
 import java.util.Date;
 import java.util.List;

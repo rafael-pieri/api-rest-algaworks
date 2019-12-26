@@ -1,4 +1,4 @@
-package com.socialbooks.services.histories;
+package com.socialbooks.services.book;
 
 import com.socialbooks.model.book.Book;
 import com.socialbooks.model.book.BookHistory;

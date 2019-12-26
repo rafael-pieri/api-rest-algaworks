@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: socialbooks
+  datasource:
+    url: jdbc:mysql://localhost:3306/socialbooksDB?createDatabaseIfNotExist=true&useSSL=false&requireSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect

@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/rafael-pieri/api-rest-algaworks.svg?branch=master)](https://travis-ci.com/rafael-pieri/api-rest-algaworks)
 
-## RESTful Web Services
+## Web Services RESTFul and Spring
 
 Example of implementing a RESTFul web service. This service has no hypermedia...
 

@@ -5,13 +5,13 @@ import com.algaworks.socialbooks.model.book.Book;
 import com.algaworks.socialbooks.model.book.Comment;
 import com.algaworks.socialbooks.repository.BookRepository;
 import com.algaworks.socialbooks.repository.CommentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class CommentService {
@@ -19,7 +19,6 @@ public class CommentService {
     private final BookRepository bookRepository;
     private final CommentRepository commentRepository;
 
-    @Autowired
     public CommentService(final BookRepository bookRepository,
                           final CommentRepository commentRepository) {
         this.bookRepository = bookRepository;

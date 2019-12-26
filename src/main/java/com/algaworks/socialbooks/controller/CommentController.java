@@ -1,12 +1,12 @@
 package com.algaworks.socialbooks.controller;
 
+import com.algaworks.socialbooks.model.book.Comment;
+import com.algaworks.socialbooks.services.CommentService;
+
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import com.algaworks.socialbooks.model.book.Comment;
-import com.algaworks.socialbooks.services.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,12 +24,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api/books")
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @PostMapping(value = "/{id}/comments")
-    public ResponseEntity<Void> addComments (@PathVariable("id") final UUID bookId,
-            @RequestBody final Comment comment) {
+    public ResponseEntity<Void> addComments(@PathVariable("id") final UUID bookId,
+                                            @RequestBody final Comment comment) {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         comment.setUser(auth.getName());
         comment.setUser("Rafael");
@@ -41,7 +44,7 @@ public class CommentController {
 
     @GetMapping(value = "/{id}/comments")
     @ResponseStatus(HttpStatus.OK)
-    public List<Comment> listComments (@PathVariable("id") final UUID bookId) {
+    public List<Comment> listComments(@PathVariable("id") final UUID bookId) {
         return this.commentService.listComment(bookId);
     }
 }

@@ -6,14 +6,17 @@ import com.algaworks.socialbooks.dto.author.AuthorPostObjectDTO;
 import com.algaworks.socialbooks.dto.author.AuthorPutObjectDTO;
 import com.algaworks.socialbooks.exceptions.AuthorNotFoundException;
 import com.algaworks.socialbooks.model.author.Author;
-import com.algaworks.socialbooks.model.author.AuthorHistory;
 import com.algaworks.socialbooks.repository.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.algaworks.socialbooks.services.histories.AuthorHistoryService;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthorService {
@@ -21,7 +24,6 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorHistoryService authorHistoryService;
 
-    @Autowired
     public AuthorService(final AuthorRepository authorRepository,
                          final AuthorHistoryService authorHistoryService) {
         this.authorRepository = authorRepository;
@@ -29,115 +31,72 @@ public class AuthorService {
     }
 
     public Collection<AuthorDTO> findAll() {
-        final List<Author> authors = authorRepository.findAll();
+        return this.authorRepository.findAll().stream()
+                .map(author -> AuthorDTO.builder()
+                        .id(author.getId())
+                        .name(author.getName())
+                        .nationality(author.getNationality())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
-        final ArrayList<AuthorDTO> authorDTOS = new ArrayList<>();
+    public AuthorDTO findById(final UUID id) {
+        final Optional<Author> authorOptional = this.authorRepository.findById(id);
 
-        authors.forEach(author -> {
-            final AuthorDTO authorDTO = AuthorDTO.builder()
+        if (authorOptional.isPresent()) {
+            final Author author = authorOptional.get();
+            return AuthorDTO.builder()
                     .id(author.getId())
                     .name(author.getName())
                     .nationality(author.getNationality())
                     .build();
-
-            authorDTOS.add(authorDTO);
-        });
-
-        return authorDTOS;
-    }
-
-    public AuthorDTO findById(final UUID id) {
-        final Optional<Author> authorOptional = authorRepository.findById(id);
-
-        if (!authorOptional.isPresent()) {
-            throw new AuthorNotFoundException("The author could not be found.");
         }
 
-        final Author author = authorOptional.get();
-
-        return AuthorDTO.builder()
-                .id(author.getId())
-                .name(author.getName())
-                .nationality(author.getNationality())
-                .build();
+        throw new AuthorNotFoundException("The author could not be found.");
     }
 
     public AuthorCreateDTO save(final AuthorPostObjectDTO authorPostObjectDTO) {
-        final Author author = new Author.AuthorBuilder()
-                .withName(authorPostObjectDTO.getName())
-                .withNationality(authorPostObjectDTO.getNationality())
-                .withModifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
-                .build();
+        final Author author = this.authorRepository.save(
+                Author.builder()
+                        .name(authorPostObjectDTO.getName())
+                        .nationality(authorPostObjectDTO.getNationality())
+                        .modifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
+                        .build()
+        );
 
-        final Author createdAuthor = authorRepository.save(author);
+        this.authorHistoryService.createOrUpdate(author);
 
-        final AuthorHistory authorHistory = new AuthorHistory.AuthorHistoryBuilder()
-                .withAuthorId(author.getId())
-                .withName(author.getName())
-                .withNationality(author.getNationality())
-                .withCreatedAt(author.getModifiedAt())
-                .build();
-
-        authorHistoryService.createOrUpdate(authorHistory);
-
-        return new AuthorCreateDTO(createdAuthor.getId(), createdAuthor.getModifiedAt());
+        return new AuthorCreateDTO(author.getId(), author.getModifiedAt());
     }
 
     public AuthorCreateDTO update(final UUID id,
                                   final AuthorPutObjectDTO authorPutObjectDTO) {
-        final Optional<Author> authorOptional = authorRepository.findById(id);
+        final Optional<Author> authorOptional = this.authorRepository.findById(id);
 
-        if (!authorOptional.isPresent()) {
-            throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
+        if (authorOptional.isPresent()) {
+            final Author updatedAuthor = this.authorRepository.save(
+                    Author.builder()
+                            .id(id)
+                            .name(authorPutObjectDTO.getName())
+                            .nationality(authorPutObjectDTO.getNationality())
+                            .modifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
+                            .build()
+            );
+
+            this.authorHistoryService.createOrUpdate(updatedAuthor);
+
+            return new AuthorCreateDTO(updatedAuthor.getId(), updatedAuthor.getModifiedAt());
         }
 
-        final Author author = new Author.AuthorBuilder()
-                .withId(id)
-                .withName(authorPutObjectDTO.getName())
-                .withNationality(authorPutObjectDTO.getNationality())
-                .withModifiedAt(ZonedDateTime.now(ZoneOffset.UTC))
-                .build();
-
-        final Author updatedAuthor = authorRepository.save(author);
-
-        final AuthorHistory authorHistory = new AuthorHistory.AuthorHistoryBuilder()
-                .withAuthorId(author.getId())
-                .withName(author.getName())
-                .withNationality(author.getNationality())
-                .withCreatedAt(author.getModifiedAt())
-                .build();
-
-        authorHistoryService.createOrUpdate(authorHistory);
-
-        return new AuthorCreateDTO(updatedAuthor.getId(), updatedAuthor.getModifiedAt());
+        throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
     }
 
     public void delete(final UUID id) {
-        if (!authorRepository.findById(id).isPresent()) {
-            throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
+        if (this.authorRepository.findById(id).isPresent()) {
+            this.authorRepository.deleteById(id);
+            this.authorHistoryService.softDeleteAuthorHistoryById(id);
         }
 
-        authorRepository.deleteById(id);
-
-        softDeleteAuthorHistoryById(id);
-    }
-
-    private void softDeleteAuthorHistoryById(final UUID id) {
-        final Optional<AuthorHistory> authorHistoryOptional = authorHistoryService.findTopByAuthorIdOrderByCreatedAtDesc(id);
-
-        if (authorHistoryOptional.isPresent()) {
-            final AuthorHistory authorHistory = authorHistoryOptional.get();
-
-            final AuthorHistory updatedAuthorHistory = new AuthorHistory.AuthorHistoryBuilder()
-                    .withId(authorHistory.getId())
-                    .withAuthorId(authorHistory.getAuthorId())
-                    .withName(authorHistory.getName())
-                    .withNationality(authorHistory.getNationality())
-                    .withCreatedAt(authorHistory.getCreatedAt())
-                    .withDeletedAt(ZonedDateTime.now(ZoneOffset.UTC))
-                    .build();
-
-            authorHistoryService.createOrUpdate(updatedAuthorHistory);
-        }
+        throw new AuthorNotFoundException(String.format("The author with id %s could not be found", id));
     }
 }

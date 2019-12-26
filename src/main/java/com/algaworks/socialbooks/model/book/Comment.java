@@ -1,6 +1,15 @@
 package com.algaworks.socialbooks.model.book;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,74 +20,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Comment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@NotEmpty(message = "The field Comment is required.")
-	@Size(max = 1500, message = "The field comment can not contain more than 1500 characters.")
-	@JsonProperty("comment")
-	private String text;
+    @NotEmpty(message = "The field Comment is required.")
+    @Size(max = 1500, message = "The field comment can not contain more than 1500 characters.")
+    @JsonProperty("comment")
+    private String text;
 
-	@JsonInclude(Include.NON_NULL)
-	private String user;
+    @JsonInclude(Include.NON_NULL)
+    private String user;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date date;
+    @JsonInclude(Include.NON_NULL)
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date date;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BOOK_ID")
-	@JsonIgnore
-	private Book book;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(final Long id) {
-		this.id = id;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(final String text) {
-		this.text = text;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(final String user) {
-		this.user = user;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(final Date date) {
-		this.date = date;
-	}
-
-	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(final Book book) {
-		this.book = book;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOOK_ID")
+    @JsonIgnore
+    private Book book;
 }

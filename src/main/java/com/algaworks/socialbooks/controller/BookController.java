@@ -1,17 +1,16 @@
 package com.algaworks.socialbooks.controller;
 
-import java.util.Collection;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.Valid;
-
 import com.algaworks.socialbooks.dto.book.BookCreateDTO;
 import com.algaworks.socialbooks.dto.book.BookDTO;
 import com.algaworks.socialbooks.dto.book.BookPostObjectDTO;
 import com.algaworks.socialbooks.dto.book.BookPutObjectDTO;
 import com.algaworks.socialbooks.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,8 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/books")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @CrossOrigin
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

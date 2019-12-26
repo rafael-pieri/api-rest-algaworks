@@ -1,16 +1,15 @@
 package com.algaworks.socialbooks.controller;
 
-import java.util.Collection;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
 import com.algaworks.socialbooks.dto.author.AuthorCreateDTO;
 import com.algaworks.socialbooks.dto.author.AuthorDTO;
 import com.algaworks.socialbooks.dto.author.AuthorPostObjectDTO;
 import com.algaworks.socialbooks.dto.author.AuthorPutObjectDTO;
 import com.algaworks.socialbooks.services.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/authors")
 public class AuthorController {
 
-    @Autowired
-    private AuthorService authorService;
+    private final AuthorService authorService;
+
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)

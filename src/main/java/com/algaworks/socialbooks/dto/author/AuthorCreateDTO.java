@@ -1,18 +1,23 @@
 package com.algaworks.socialbooks.dto.author;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorCreateDTO {
 
-    private final @NonNull UUID id;
-    private final @NonNull ZonedDateTime lastModified;
+    @NotNull
+    private UUID id;
+
+    @NotNull
+    private ZonedDateTime lastModified;
 }

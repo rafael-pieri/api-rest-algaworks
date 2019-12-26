@@ -1,9 +1,14 @@
 package com.algaworks.socialbooks.model.book;
 
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import com.algaworks.socialbooks.model.author.Author;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,13 +20,17 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-import com.algaworks.socialbooks.model.author.Author;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.hibernate.annotations.Type;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Book {
 
@@ -56,112 +65,4 @@ public class Book {
 
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
     private ZonedDateTime modifiedAt;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public Date getPublication() {
-        return publication;
-    }
-
-    public void setPublication(final Date publication) {
-        this.publication = publication;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(final String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(final String summary) {
-        this.summary = summary;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(final List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(final Author author) {
-        this.author = author;
-    }
-
-    public ZonedDateTime getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(final ZonedDateTime modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
-    public static class BookBuilder {
-
-        private final Book book = new Book();
-
-        public BookBuilder withId(final UUID id) {
-            this.book.id = id;
-            return this;
-        }
-
-        public BookBuilder withName(final String name) {
-            this.book.name = name;
-            return this;
-        }
-
-        public BookBuilder withPublication(final Date publication) {
-            this.book.publication = publication;
-            return this;
-        }
-
-        public BookBuilder withPublisher(final String publisher) {
-            this.book.publisher = publisher;
-            return this;
-        }
-
-        public BookBuilder withSummary(final String summary) {
-            this.book.summary = summary;
-            return this;
-        }
-
-        public BookBuilder withAuthor(final Author author) {
-            this.book.author = author;
-            return this;
-        }
-
-        public BookBuilder withModifiedAt(final ZonedDateTime modifiedAt) {
-            this.book.modifiedAt = modifiedAt;
-            return this;
-        }
-
-        public Book build() {
-            return this.book;
-        }
-    }
 }

@@ -1,9 +1,14 @@
 package com.algaworks.socialbooks.model.book;
 
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import com.algaworks.socialbooks.model.author.Author;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,13 +20,17 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-import com.algaworks.socialbooks.model.author.Author;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.hibernate.annotations.Type;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class BookHistory {
 
@@ -59,130 +68,4 @@ public class BookHistory {
 
     @Type(type = "org.hibernate.type.ZonedDateTimeType")
     private ZonedDateTime deletedAt;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public Date getPublication() {
-        return publication;
-    }
-
-    public void setPublication(final Date publication) {
-        this.publication = publication;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(final String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(final String summary) {
-        this.summary = summary;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(final List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(final Author author) {
-        this.author = author;
-    }
-
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(final ZonedDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public ZonedDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(final ZonedDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public static class BookHistoryBuilder {
-
-        private final BookHistory bookHistory = new BookHistory();
-
-        public BookHistoryBuilder withId(final UUID id) {
-            this.bookHistory.id = id;
-            return this;
-        }
-
-        public BookHistoryBuilder withName(final String name) {
-            this.bookHistory.name = name;
-            return this;
-        }
-
-        public BookHistoryBuilder withPublication(final Date publication) {
-            this.bookHistory.publication = publication;
-            return this;
-        }
-
-        public BookHistoryBuilder withPublisher(final String publisher) {
-            this.bookHistory.publisher = publisher;
-            return this;
-        }
-
-        public BookHistoryBuilder withSummary(final String summary) {
-            this.bookHistory.summary = summary;
-            return this;
-        }
-
-        public BookHistoryBuilder withComments(final List<Comment> comments) {
-            this.bookHistory.comments = comments;
-            return this;
-        }
-
-        public BookHistoryBuilder withAuthor(final Author author) {
-            this.bookHistory.author = author;
-            return this;
-        }
-
-        public BookHistoryBuilder withCreatedAt(final ZonedDateTime createdAt) {
-            this.bookHistory.createdAt = createdAt;
-            return this;
-        }
-
-        public BookHistoryBuilder withDeletedAt(final ZonedDateTime deletedAt) {
-            this.bookHistory.deletedAt = deletedAt;
-            return this;
-        }
-
-        public BookHistory build() {
-            return this.bookHistory;
-        }
-    }
 }
